@@ -1,14 +1,33 @@
 from sys import argv
+from pathlib import Path
 from requests import get
 
 day = argv[1]
 url = argv[2]
 
+template = f"""from sys import argv
+
+day = int("{day}")
+part = argv[2]
+
+with open("day{{}}/input".format(day), "r") as f:
+    data = f.read()
+"""
+
 cookie = open("cookie.txt", 'r').read().strip()
 
+# create file template
+template_file = Path("./day{}/day{}.py".format(day, day))
+template_file.parent.mkdir(exist_ok=True, parents=True)
+template_file.write_text(template.format(day))
 
+# download input
 data = get(url.format(day), cookies={"session":cookie})
-with open("./day{}/input".format(day), "wb") as file:
-    file.write(data.content)
+
+# write input file
+input_file = Path("./day{}/input".format(day))
+input_file.parent.mkdir(exist_ok=True, parents=True)
+print(data.content.decode())
+input_file.write_text(data.content.decode())
 
 print("Done!")
