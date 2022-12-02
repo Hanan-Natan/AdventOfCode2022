@@ -27,7 +27,6 @@ data = get(url.format(day), cookies={"session":cookie})
 # write input file
 input_file = Path("./day{}/input".format(day))
 input_file.parent.mkdir(exist_ok=True, parents=True)
-print(data.content.decode())
 input_file.write_text(data.content.decode())
 
 print("Done!")
