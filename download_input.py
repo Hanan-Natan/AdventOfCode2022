@@ -8,7 +8,7 @@ url = argv[2]
 template = f"""from sys import argv
 
 day = int("{day}")
-part = argv[2]
+part = argv[1]
 
 with open("day{{}}/input".format(day), "r") as f:
     data = f.read()
