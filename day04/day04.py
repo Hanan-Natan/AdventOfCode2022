@@ -10,7 +10,7 @@ count = 0
 if part == 1:
     for l in data.splitlines():
         (ll, lr), (rl, rr) = l.split(",")[0].split("-"), l.split(",")[1].split("-")
-        ll, lr, rl, rr = int(ll), int(lr), int(rl), int(rr)
+        ll, lr, rl, rr = [int(y) for y in [ll, lr, rl, rr]]
 
         if ll <= rl and lr >= rr:
             # left contains right
@@ -24,7 +24,7 @@ else:
     count = len(lines)
     for l in lines:
         (ll, lr), (rl, rr) = l.split(",")[0].split("-"), l.split(",")[1].split("-")
-        ll, lr, rl, rr = int(ll), int(lr), int(rl), int(rr)
+        ll, lr, rl, rr = [int(y) for y in [ll, lr, rl, rr]]
 
         if lr < rl or ll > rr:
             # not overlap
