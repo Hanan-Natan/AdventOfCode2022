@@ -16,24 +16,12 @@ def build_stacks(stacks):
 
     return c
 
-# data = """    [D]    
-# [N] [C]    
-# [Z] [M] [P]
-#  1   2   3 
-
-# move 1 from 2 to 1
-# move 3 from 1 to 3
-# move 2 from 2 to 1
-# move 1 from 1 to 2"""
-
 moves = False
 stacks = []
 for l in data.splitlines():
     if len(l) == 0:
         moves = True
-        # parse stacks
         stacks = build_stacks(stacks)
-        # stacks[1].append("D") # TODO: remove
     elif moves:
         i = l.split()
         n, f, t = [int(x) for x in [i[1], i[3], i[5]]]
