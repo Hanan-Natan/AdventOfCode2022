@@ -1,3 +1,4 @@
+from functools import reduce
 from sys import argv
 
 day = int("08")
@@ -15,45 +16,60 @@ def parse(data):
     return g
 
 
-test_data = """30373
-25512
-65332
-33549
-35390"""
+# test_data = """30373
+# 25512
+# 65332
+# 33549
+# 35390"""
 
+g = parse(data)
+# g = parse(test_data.strip().splitlines())
 if part == 1:
-    g = parse(data)
     visible = (len(g) * 2) + (len(g[0])*2) - 4
-    # print("Vis", visible)
-    vis = True
-    # col = [-1, 1, 0, 0] # left, right
-    # row = [0, 0, -1, 1] # up, down
     for r in range(1, len(g)-1):
         # walk rows
         for c in range(1, len(g[r])-1):
-
-            # visible += 1
-            # if r == 1 and c == 1:
-            #     print("checking left", g[r][c], g[r][:c]) # left
             if all(l < g[r][c] for l in g[r][:c]):
-                # print(r, c, g[r][c], "vis")
                 visible += 1
-                # print("checking right", g[r][c], g[r][c+1:]) # right
-                # if r == 3 and c == 3:
-                #     print(g[r][c+1:])
             elif all(l < g[r][c] for l in g[r][c+1:]):
-                # print(r, c, g[r][c], "vis")
                 visible += 1
-                # print("checking up", g[r][c], g[r][c+1:]) # right
             elif all(g[l][c] < g[r][c] for l in range(r-1, -1, -1)):
-                # print(r, c, g[r][c], "vis")
                 visible += 1
-                # print("checking down", g[r][c], g[r][c+1:]) # right
             elif all(g[l][c] < g[r][c] for l in range(r+1, len(g))):
-                # print(r, c, g[r][c], "vis")
                 visible += 1
 
     print(visible)
 
 if part == 2:
-    pass
+    highest = 0
+    for r in range(1, len(g)-1):
+        # walk rows
+        for c in range(1, len(g[r])-1):
+            loop = [list(reversed(g[r][:c])), g[r][c+1:]]  # left and right
+            mul = []
+            for l in loop:
+                count = 0
+                for x in l:
+                    if x >= g[r][c]:
+                        count += 1
+                        break
+                    else:
+                        count += 1
+                mul.append(count)
+
+            loop = [range(r-1, -1, -1), range(r+1, len(g))]  # up and down
+            for l in loop:
+                count = 0
+                for x in l:
+                    if g[x][c] >= g[r][c]:
+                        count += 1
+                        break
+                    else:
+                        count += 1
+                mul.append(count)
+
+            highest =  max(reduce(lambda x,y: x * y, mul), highest)
+    print(highest)
+            # if r == 1 and c == 2:
+            #     print(r, c, g[r][c], mul)
+            #     exit(0)
