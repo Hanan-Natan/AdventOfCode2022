@@ -40,36 +40,58 @@ if part == 1:
 
     print(visible)
 
-if part == 2:
+elif part == 2:
     highest = 0
+    row = [0,0,-1,1]
+    col = [-1,1, 0, 0]
     for r in range(1, len(g)-1):
-        # walk rows
+        # walk rows. Another method for walking the graph. This one is IMHO better than the one i originaly used to solve.
         for c in range(1, len(g[r])-1):
-            loop = [list(reversed(g[r][:c])), g[r][c+1:]]  # left and right
             mul = []
-            for l in loop:
-                count = 0
-                for x in l:
-                    if x >= g[r][c]:
-                        count += 1
+            for i in range(len(row)):
+                count = 1
+                c_row = r+row[i]
+                c_col = c+col[i]
+                while True:
+                    if not (0<=c_row<len(g) and 0<=c_col<len(g[0])):
+                        count -= 1
                         break
-                    else:
-                        count += 1
-                mul.append(count)
-
-            loop = [range(r-1, -1, -1), range(r+1, len(g))]  # up and down
-            for l in loop:
-                count = 0
-                for x in l:
-                    if g[x][c] >= g[r][c]:
-                        count += 1
+                    if g[c_row][c_col] >= g[r][c] :
                         break
-                    else:
-                        count += 1
+                    count +=1
+                    c_row += row[i]
+                    c_col += col[i]
                 mul.append(count)
-
             highest =  max(reduce(lambda x,y: x * y, mul), highest)
     print(highest)
+
+                
+
+            # loop = [list(reversed(g[r][:c])), g[r][c+1:]]  # left and right
+            # mul = []
+            # for l in loop:
+            #     count = 0
+            #     for x in l:
+            #         if x >= g[r][c]:
+            #             count += 1
+            #             break
+            #         else:
+            #             count += 1
+            #     mul.append(count)
+
+            # loop = [range(r-1, -1, -1), range(r+1, len(g))]  # up and down
+            # for l in loop:
+            #     count = 0
+            #     for x in l:
+            #         if g[x][c] >= g[r][c]:
+            #             count += 1
+            #             break
+            #         else:
+            #             count += 1
+            #     mul.append(count)
+
+            # highest =  max(reduce(lambda x,y: x * y, mul), highest)
+    # print(highest)
             # if r == 1 and c == 2:
             #     print(r, c, g[r][c], mul)
             #     exit(0)
