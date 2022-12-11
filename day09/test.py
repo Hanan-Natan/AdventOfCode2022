@@ -4,6 +4,16 @@ from collections import defaultdict
 infile = sys.argv[1] if len(sys.argv)>1 else './day09/input'
 data = open(infile).read().strip()
 lines = [x for x in data.split('\n')]
+test_data = """R 5
+U 8
+L 8
+D 3
+R 17
+D 10
+L 25
+U 20""".strip().splitlines()
+
+# lines = test_data
 
 def adjust(H,T):
     dr = (H[0]-T[0])
@@ -40,6 +50,6 @@ for line in lines:
         for i in range(1, 9):
             T[i] = adjust(T[i-1], T[i])
         P1.add(T[0])
-        # P2.add(T[8])
+        P2.add(T[8])
 print(len(P1))
-# print(len(P2))
+print(len(P2))
