@@ -56,11 +56,7 @@ class Graph:
         while queue:
             s = queue.pop(0)
             # print(s, end=' ')
-            if 2371 == s:
-                print(s)
             for i in self.graph[s]:
-                if 2371 == i:
-                    print(s)
                 if visited[i] == False:
                     queue.append(i)
                     visited[i] = True
