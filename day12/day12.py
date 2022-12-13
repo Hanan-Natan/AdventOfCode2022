@@ -2,8 +2,10 @@ from collections import defaultdict
 from pprint import pprint
 from queue import PriorityQueue
 from sys import argv
+import sys
 from typing import List
 
+sys.setrecursionlimit(5000)
 part = int(argv[1])
 
 with open("day12/input", "r") as f:
@@ -17,6 +19,7 @@ class Graph:
         self.parent = {}
         self.end = -1
         self.start = -1
+        self.all_a = []
 
     def add_edge(self, u, v):
         self.graph[u].append(v)
@@ -30,29 +33,29 @@ class Graph:
             # print(data[r])
             if "S" in data[r]:
                 self.start = data[r].find("S") + (COL * r)
-                print(f"start at {self.start}")
+                # print(f"start at {self.start}")
                 data[r] = data[r].replace("S", "a")
             if "E" in data[r]:
                 self.end = data[r].find("E") + (COL * r)
-                print(f"End at {self.end}")
+                # print(f"End at {self.end}")
                 data[r] = data[r].replace("E", "z")
 
             for c in range(COL):
+                if data[r][c] == "a":
+                    self.all_a.append(r*COL + c)
                 for (dr, dc) in DIR:
                     if not (0 <= r + dr < ROWS and 0 <= c+dc < COL):
                         continue
                     if (data[r][c] >= data[r+dr][c+dc]) or (ord(data[r+dr][c+dc]) - ord(data[r][c]) == 1):
                     # if (data[r][c] == data[r+dr][c+dc]) or (ord(data[r+dr][c+dc]) - ord(data[r][c]) == 1 or (ord(data[r][c]) - ord(data[r+dr][c+dc]) > 0)):
                         self.add_edge(r*COL + c, (r+dr)*COL + (c+dc))
-        print(self.graph[self.start])
-        print(self.graph[self.end])
-        self.parent = [-1 for _ in range(max(self.graph)+1)]
 
     def BFS(self, s):
         visited = [False] * (max(self.graph)+1)
         queue = []
         queue.append(s)
         visited[s] = True
+        self.parent = [-1 for _ in range(max(self.graph)+1)]
         while queue:
             s = queue.pop(0)
             # print(s, end=' ')
@@ -63,13 +66,11 @@ class Graph:
                     self.parent[i] = s
                     # print(f"Parent of {i} is {s}")
 
-    def count_short_path(self, start, end, parents, count):
+    def count_short_path(self, start, end, parents):
         if (start == end) or (end == -1):
-            print("Shortest", count)
-        else:
-            count += 1
-            self.count_short_path(start, parents[end], parents, count)
-            # print(f" {end}", end='')
+            return 0
+
+        return 1 + self.count_short_path(start, parents[end], parents)
 
 # data = """Sabqponm
 # abcryxxl
@@ -81,11 +82,19 @@ class Graph:
 g = Graph()
 g.parse(data)
 
-g.BFS(g.start)
-# print(g.end, g.parent[g.end])
-print(g.count_short_path(g.start, g.end, g.parent, 0))
+# Part 1 and part 2 are buggy as hell
+# I've bugs in the BFS and shortest paath algorithem
+# I need to study this topic more...
+# I manged to answer right but that's not in a manner that I like to...
 
 if part == 1:
-    pass
+    g.BFS(g.start)
+    s = g.count_short_path(g.start, g.end, g.parent)
+    print("Shortest {}".format(s))
 else:
-    pass
+    m = []
+    for s in g.all_a:
+        g.BFS(s)
+        m.append((g.count_short_path(s, g.end, g.parent), s))
+
+    print("Shortest {}".format(m))
