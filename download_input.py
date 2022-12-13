@@ -3,7 +3,7 @@ from pathlib import Path
 from requests import get
 
 day = int(argv[1])
-url = f"https://adventofcode.com/2022/day/{day:02d}/input"
+url = f"https://adventofcode.com/2022/day/{day:01d}/input"
 
 template = f"""from sys import argv
 
