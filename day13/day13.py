@@ -88,4 +88,30 @@ if part == 1:
 
     print(f"Result {total}")
 else:
-    pass
+
+    def compare_me(l, r):
+        res = compare_items(l, r)
+        if res == True:
+            return -1
+        elif res == False:
+            return 1
+        else:
+            return 0
+
+    c = 0
+    all_packets = []
+    while c < len(data):
+        left, right = eval(data[c]), eval(data[c+1])
+        all_packets.append(left)
+        all_packets.append(right)
+        c+=3
+    all_packets.append([[2]])
+    all_packets.append([[6]])
+    from functools import cmp_to_key
+    # for *every* pair of lists we run the compare funciton. Thus we get the sorted list from low to high
+    all_packets = sorted(all_packets, key=cmp_to_key(lambda l, r: compare_me(l, r)))
+    res = 1
+    for i, p in enumerate(all_packets):
+        if p==[[2]] or p == [[6]]:
+            res *= i+1
+    print(res)
